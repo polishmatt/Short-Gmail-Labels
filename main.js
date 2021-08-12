@@ -4,8 +4,28 @@
 var LABEL_CLASSES = ['av', 'hN'];
 
 function cleanLabel(element) {
-  if (element.innerHTML && element.innerHTML.indexOf('/') != -1) {
-    element.innerHTML = element.innerHTML.substring(element.innerHTML.lastIndexOf('/') + 1);
+  // Only look for slashes outside of HTML which is used for emoji
+  for(
+    var slashIndex = element.innerHTML.lastIndexOf('/');
+    slashIndex !== -1;
+    slashIndex = element.innerHTML.lastIndexOf('/', slashIndex - 1)
+  ) {
+    var leftOpenIndex = element.innerHTML.lastIndexOf('<', slashIndex);
+    var leftCloseIndex = element.innerHTML.lastIndexOf('>', slashIndex);
+    var rightOpenIndex = element.innerHTML.indexOf('<', slashIndex);
+    var rightCloseIndex = element.innerHTML.indexOf('>', slashIndex);
+    if (
+      leftOpenIndex === -1 ||
+      rightCloseIndex === -1 ||
+      leftCloseIndex !== -1 && leftCloseIndex > leftOpenIndex ||
+      rightOpenIndex !== -1 && rightOpenIndex < rightCloseIndex
+    ) {
+      break;
+    }
+  }
+
+  if (slashIndex !== -1) {
+    element.innerHTML = element.innerHTML.substring(slashIndex + 1);
   }
 }
 

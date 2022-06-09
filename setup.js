@@ -39,12 +39,15 @@ function cleanLabels(element) {
   }
 }
 
-cleanLabels(document.body);
+if (!window.__SHORT_GMAIL_LABELS_SETUP) {
+  cleanLabels(document.body);
 
-// This is broad but plugging in somewhere more specific 
-//   is much more likely to break due to changes
-document.body.addEventListener('DOMNodeInserted', function(event) {
-  cleanLabels(event.target);
-});
+  // This is broad but plugging in somewhere more specific 
+  //   is much more likely to break due to changes
+  document.body.addEventListener('DOMNodeInserted', function(event) {
+    cleanLabels(event.target);
+  });
+}
+window.__SHORT_GMAIL_LABELS_SETUP = true;
 
 })();

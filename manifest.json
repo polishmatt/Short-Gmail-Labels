@@ -8,7 +8,6 @@
     "32": "icon32.png",
     "48": "icon48.png"
   },
-  "action": {},
   "permissions": [
     "scripting"
   ],

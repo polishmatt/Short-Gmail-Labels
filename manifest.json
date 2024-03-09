@@ -1,6 +1,6 @@
 {
   "name": "Short Gmail Labels",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Shorten your Gmail labels so parent labels are not displayed.",
   "manifest_version": 3,
   "icons": { 

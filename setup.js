@@ -1,7 +1,10 @@
 (function() {
 "use strict";
 
-var LABEL_CLASSES = ['av', 'hN'];
+const LABEL_CLASSES = ['av', 'hN'];
+const escapeHTMLPolicy = trustedTypes.createPolicy("myEscapePolicy", {
+  createHTML: (string) => string,
+});
 
 function cleanLabel(element) {
   // Only look for slashes outside of HTML which is used for emoji
@@ -25,7 +28,7 @@ function cleanLabel(element) {
   }
 
   if (slashIndex !== -1) {
-    element.innerHTML = element.innerHTML.substring(slashIndex + 1);
+    element.innerHTML = escapeHTMLPolicy.createHTML(element.innerHTML.substring(slashIndex + 1));
   }
 }
 
@@ -39,14 +42,23 @@ function cleanLabels(element) {
   }
 }
 
+function mutationCallback(mutationList, observer) {
+  for (const mutation of mutationList) {
+    if (mutation.type === "childList") {
+      for (const node of mutation.addedNodes) {
+        cleanLabels(document.body);
+      }
+    }
+  }
+}
+
 if (!window.__SHORT_GMAIL_LABELS_SETUP) {
   cleanLabels(document.body);
 
+  const observer = new MutationObserver(mutationCallback);
   // This is broad but plugging in somewhere more specific 
   //   is much more likely to break due to changes
-  document.body.addEventListener('DOMNodeInserted', function(event) {
-    cleanLabels(event.target);
-  });
+  observer.observe(document.body, { childList: true, subtree: true });
 }
 window.__SHORT_GMAIL_LABELS_SETUP = true;
 

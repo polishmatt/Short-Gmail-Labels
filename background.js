@@ -4,8 +4,7 @@
 function setupTab(tab) {
   if (
     !tab ||
-    /^chrome:\/\//.test(tab.url) ||
-    /^https?:\/\/chrome\.google\.com\/webstore/.test(tab.url)
+    !/^https?:\/\/mail\.google\.com\/.*?/.test(tab.url)
   ) {
     return;
   }
